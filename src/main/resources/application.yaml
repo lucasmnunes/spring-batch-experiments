@@ -1,0 +1,18 @@
+server:
+  port: 8090
+
+spring:
+  h2:
+    console:
+      enabled: true
+      path: /h2
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        jdbc:
+          lob:
+            non-contextual-creation: true
+        format_sql: true
+    show-sql: true
