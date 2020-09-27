@@ -1,5 +1,7 @@
 server:
-  port: 8090
+  port: 8092
+  servlet:
+    context-path: /batch
 
 spring:
   h2:
@@ -16,3 +18,18 @@ spring:
             non-contextual-creation: true
         format_sql: true
     show-sql: true
+  batch:
+    job:
+      enabled: false
+
+batch:
+  job:
+    name: "Players-Batch"
+    builder:
+      name: "Players-Batch-Builder"
+    reader:
+      name: "Players-Batch-Reader"
+
+  source:
+    file:
+      name: players.csv
