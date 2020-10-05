@@ -22,6 +22,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import poc.springbatch.batch.model.Player;
 import poc.springbatch.batch.processing.JobNotificationListener;
+import poc.springbatch.batch.processing.model.PlayerCSV;
 
 @Configuration
 @EnableBatchProcessing
@@ -51,8 +52,8 @@ public class BatchConfiguration {
 
     @Bean
     public Job job(JobNotificationListener listener,
-                   ItemReader<Player> itemReader,
-                   ItemProcessor<Player, Player> itemProcessor,
+                   ItemReader<PlayerCSV> itemReader,
+                   ItemProcessor<PlayerCSV, Player> itemProcessor,
                    ItemWriter<Player> itemWriter) {
         return jobBuilderFactory.get(jobBuilderName)
                 .incrementer(new RunIdIncrementer())
@@ -61,9 +62,10 @@ public class BatchConfiguration {
                 .build();
     }
 
-    private Step step(ItemReader<Player> itemReader, ItemProcessor<Player, Player> itemProcessor, ItemWriter<Player> itemWriter) {
+    private Step step(ItemReader<PlayerCSV> itemReader, ItemProcessor<PlayerCSV, Player> itemProcessor,
+                      ItemWriter<Player> itemWriter) {
         return stepBuilderFactory.get(jobName)
-                .<Player, Player>chunk(100)
+                .<PlayerCSV, Player>chunk(100)
                 .reader(itemReader)
                 .processor(itemProcessor)
                 .writer(itemWriter)
@@ -71,8 +73,8 @@ public class BatchConfiguration {
     }
 
     @Bean
-    public FlatFileItemReader<Player> reader(@Value("${batch.source.file.name}") String sourceFileName) {
-        return new FlatFileItemReaderBuilder<Player>()
+    public FlatFileItemReader<PlayerCSV> reader(@Value("${batch.source.file.name}") String sourceFileName) {
+        return new FlatFileItemReaderBuilder<PlayerCSV>()
                 .resource(new ClassPathResource(sourceFileName))
                 .name(jobReaderName)
                 .linesToSkip(HEADER_LINE)
@@ -81,16 +83,16 @@ public class BatchConfiguration {
     }
 
     @Bean
-    public LineMapper<Player> lineMapper() {
+    public LineMapper<PlayerCSV> lineMapper() {
         DelimitedLineTokenizer lineTokenizer = new DelimitedLineTokenizer();
         lineTokenizer.setDelimiter(FILE_DELIMITER);
         lineTokenizer.setNames(FILE_HEADER);
         lineTokenizer.setStrict(false);
 
-        BeanWrapperFieldSetMapper<Player> fieldSetMapper = new BeanWrapperFieldSetMapper<>();
-        fieldSetMapper.setTargetType(Player.class);
+        BeanWrapperFieldSetMapper<PlayerCSV> fieldSetMapper = new BeanWrapperFieldSetMapper<>();
+        fieldSetMapper.setTargetType(PlayerCSV.class);
 
-        DefaultLineMapper<Player> lineMapper = new DefaultLineMapper<>();
+        DefaultLineMapper<PlayerCSV> lineMapper = new DefaultLineMapper<>();
         lineMapper.setLineTokenizer(lineTokenizer);
         lineMapper.setFieldSetMapper(fieldSetMapper);
 

@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.Builder;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import poc.springbatch.batch.enumeration.PlayerPosition;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -28,7 +29,7 @@ public class Player {
     private String name;
 
     @Column
-    private String position;
+    private PlayerPosition position;
 
     @Column(name = "jersey_number")
     private Integer jerseyNumber;
