@@ -1,5 +1,5 @@
 # spring-batch-experiments
-Project to implement experiments with Spring Batch.
+A Spring Batch POC to figure out how to configure and handle its features. 
 
 ### To Execute
 
