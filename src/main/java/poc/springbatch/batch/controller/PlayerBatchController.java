@@ -15,7 +15,7 @@ import poc.springbatch.batch.service.PlayerBatchService;
 @RequestMapping("/api/v1/player-batches")
 class PlayerBatchController {
 
-    PlayerBatchService service;
+    private PlayerBatchService service;
 
     @Autowired
     PlayerBatchController(PlayerBatchService service) {

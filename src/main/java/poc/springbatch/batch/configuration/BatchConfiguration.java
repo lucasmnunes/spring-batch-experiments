@@ -84,18 +84,30 @@ public class BatchConfiguration {
 
     @Bean
     public LineMapper<PlayerCSV> lineMapper() {
+        DelimitedLineTokenizer lineTokenizer = createAndConfigureDelimitedLineTokenizer();
+        BeanWrapperFieldSetMapper<PlayerCSV> fieldSetMapper = createAndConfigureBeanWrapperFieldSetMapper();
+        return createAndConfigureLineMapper(lineTokenizer, fieldSetMapper);
+    }
+
+    private DelimitedLineTokenizer createAndConfigureDelimitedLineTokenizer() {
         DelimitedLineTokenizer lineTokenizer = new DelimitedLineTokenizer();
         lineTokenizer.setDelimiter(FILE_DELIMITER);
         lineTokenizer.setNames(FILE_HEADER);
         lineTokenizer.setStrict(false);
+        return lineTokenizer;
+    }
 
+    private BeanWrapperFieldSetMapper<PlayerCSV> createAndConfigureBeanWrapperFieldSetMapper() {
         BeanWrapperFieldSetMapper<PlayerCSV> fieldSetMapper = new BeanWrapperFieldSetMapper<>();
         fieldSetMapper.setTargetType(PlayerCSV.class);
+        return fieldSetMapper;
+    }
 
+    private DefaultLineMapper<PlayerCSV> createAndConfigureLineMapper
+            (DelimitedLineTokenizer lineTokenizer, BeanWrapperFieldSetMapper<PlayerCSV> fieldSetMapper) {
         DefaultLineMapper<PlayerCSV> lineMapper = new DefaultLineMapper<>();
         lineMapper.setLineTokenizer(lineTokenizer);
         lineMapper.setFieldSetMapper(fieldSetMapper);
-
         return lineMapper;
     }
 

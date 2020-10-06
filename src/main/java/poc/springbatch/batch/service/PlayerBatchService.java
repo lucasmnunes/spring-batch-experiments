@@ -21,8 +21,8 @@ import java.util.Map;
 @Slf4j
 public class PlayerBatchService {
 
-    JobLauncher jobLauncher;
-    Job job;
+    private JobLauncher jobLauncher;
+    private Job job;
 
     @Autowired
     PlayerBatchService(JobLauncher jobLauncher, Job job) {
@@ -32,6 +32,7 @@ public class PlayerBatchService {
 
     public BatchStatus run() throws JobParametersInvalidException, JobExecutionAlreadyRunningException,
             JobRestartException, JobInstanceAlreadyCompleteException {
+        log.info("The job is running...");
         JobExecution jobExecution = jobLauncher.run(job, new JobParameters(getJobParameters()));
         return jobExecution.getStatus();
     }
